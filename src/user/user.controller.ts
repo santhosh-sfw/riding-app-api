@@ -6,15 +6,12 @@ import {
     Patch,
     Param,
     Delete,
-    HttpException,
     HttpStatus,
+    HttpException,
   } from '@nestjs/common';
   import { UserService } from './user.service';
   import { CreateUserDto } from './dto/create-user.dto';
   import { UpdateUserDto } from './dto/update-user.dto';
-  import { validate } from 'class-validator';
-import { Console } from 'console';
-
 
   
   /**
@@ -27,31 +24,28 @@ import { Console } from 'console';
   export class UserController {
     constructor(private readonly userService: UserService) {}
   
-    
+
     @Post()
-    async createUser(@Body() createUserDto: CreateUserDto) {
-      // return this.userService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    const { email, phoneNumber } = createUserDto;
 
-      const errors = await validate(createUserDto);
-
-      const { email, phoneNumber } = createUserDto;
-
-      if (await this.userService.doesEmailExist(email)) {
-        throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
-      }
-      
-      if (await this.userService.doesPhoneNumberExist(phoneNumber)) {
-        throw new HttpException('Phone number already exists', HttpStatus.BAD_REQUEST);
-      }
-      
-
-    if (errors.length > 0) {
-      const errorMessages = errors.map((error) => Object.values(error.constraints));
-      throw new HttpException(errorMessages, HttpStatus.BAD_REQUEST);
+    if (await this.userService.doesEmailExist(email)) {
+      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
     }
 
+    if (await this.userService.doesPhoneNumberExist(phoneNumber)) {
+      throw new HttpException('Phone number already exists', HttpStatus.BAD_REQUEST);
     }
 
+    return this.userService.createUser(createUserDto);
+  
+  }
+
+    
+
+
+
+    
     
 @Get()
 findAll() {
