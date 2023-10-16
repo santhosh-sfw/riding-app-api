@@ -4,36 +4,41 @@ import {
     IsNotEmpty,
     IsString,
     MinLength,
+    Matches,
   } from 'class-validator';
-import { isFloat32Array } from 'util/types';
-  
-//   const passwordRegEx =
-//     /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
+
+  import { IsPhoneNumberFormat,IsPhoneNumberLength } from "../../validation/phone.number.validator";
+
   
   export class UpdateUserDto {
+    
     @IsString()
     @MinLength(2, { message: 'firstName must have atleast 2 characters.' })
     @IsNotEmpty()
     firstName: string;
 
     @IsString()
-    @MinLength(2, { message: 'lastName must have atleast 2 characters.' })
+    // @MinLength(2, { message: 'lastName must have atleast 2 characters.' })
     @IsNotEmpty()
     lastName: string;
   
    
+    @IsString()
     @IsNotEmpty()
-    @IsEmail(null, { message: 'Please provide valid Email.' })
+    @IsEmail({}, { message: 'Please provide valid Email.' })
     email: string;
   
+    @IsString()
     @IsNotEmpty()
+    @IsPhoneNumberFormat()
+    @IsPhoneNumberLength()
     phoneNumber: string;
   
-    @IsNotEmpty()
+    // @IsNotEmpty()
     @IsNumber()
     lat: number;
 
-    @IsNotEmpty()
+    // @IsNotEmpty()
     @IsNumber()
     lan: number;
 
@@ -43,7 +48,9 @@ import { isFloat32Array } from 'util/types';
     @IsString()
     state:string;
 
-    @IsNumber()
+    @IsString()
+    @IsNotEmpty({ message: 'Pin code is required' })
+    @Matches(/^[1-9][0-9]{5}$/, { message: 'Invalid pin code format' })
     pinCode:string;
 
     @IsString()
@@ -52,17 +59,4 @@ import { isFloat32Array } from 'util/types';
     @IsString()
     addressLine2:string;
 
-    @IsString()
-    addressLine3:string;
-
-  
-    // @IsNotEmpty()
-    // @Matches(passwordRegEx, {
-    //   message: `Password must contain Minimum 8 and maximum 20 characters, 
-    //   at least one uppercase letter, 
-    //   one lowercase letter, 
-    //   one number and 
-    //   one special character`,
-    // })
-    // password: string;
   }
