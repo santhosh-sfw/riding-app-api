@@ -1,17 +1,7 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 @Entity()
-export class User {
-  /**
-   * this decorator will help to auto generate id for the table.
-   */
+export class Driver {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -27,26 +17,23 @@ export class User {
   @Column({ type: 'varchar', length: 30 })
   phoneNumber: string;
 
-  @Column({ type: 'float' })
-  lat: number;
-
-  @Column({ type: 'float' })
-  lan: number;
+  @Column({ type: 'varchar', length: 30 })
+  licenseNumber: string;
 
   @Column({ type: 'varchar' })
-  city: string;
-  
-  @Column({ type: 'varchar' })
-  state: string;
-
-  @Column({ type: 'varchar'})
-  pinCode: string;
+  bikeMake: string;
 
   @Column({ type: 'varchar' })
-  addressLine1: string;
+  bikeModel: string;
 
   @Column({ type: 'varchar' })
-  addressLine2: string;
+  bikeRegistrationNumber: string;
+
+  @Column()
+  available: boolean; // Indicates if the driver is available for rides
+
+  @Column({ type: 'boolean', default: false })
+  isDeleted: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -56,7 +43,5 @@ export class User {
 
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
- 
-  @Column({ type: 'boolean', default: false })
-  isDeleted: boolean;
+  
 }

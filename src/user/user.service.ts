@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -12,14 +12,25 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async doesEmailExist(email: string): Promise<boolean> {
+  async EmailExist(email: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { email } });
     return !!user; // Returns true if user exists, false otherwise
   }
 
-  async doesPhoneNumberExist(phoneNumber: string): Promise<boolean> {
+  async PhoneNumberExist(phoneNumber: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { phoneNumber } });
     return !!user; // Returns true if user exists, false otherwise
+  }
+
+
+  async doesEmailExist(email: string, userId: number): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { email, id: Not(userId) } });
+    return !!user; // Returns true if another user with the same email exists, false otherwise
+  }
+  
+  async doesPhoneNumberExist(phoneNumber: string, userId: number): Promise<boolean> {
+    const driver = await this.userRepository.findOne({ where: { phoneNumber, id: Not(userId) } });
+    return !!driver; // Returns true if another user with the same phone number exists, false otherwise
   }
 
   
@@ -70,7 +81,19 @@ export class UserService {
   }
 
   
-  removeUser(id: number): Promise<{ affected?: number }> {
-    return this.userRepository.delete(id);
+  
+
+  async softDeleteUser(id: number, isDeleted: boolean): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      return false;
+    }
+
+    user.isDeleted = isDeleted;
+
+    await this.userRepository.save(user);
+    return true;
   }
+  
 }
