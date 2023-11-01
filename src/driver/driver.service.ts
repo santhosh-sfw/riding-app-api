@@ -33,6 +33,11 @@ export class DriverService {
     const driver = await this.driverRepository.findOne({ where: { phoneNumber, id: Not(driverId) } });
     return !!driver; // Returns true if another user with the same phone number exists, false otherwise
   }
+
+  async findByPhoneNumber(phoneNumber: string): Promise<Driver | undefined> {
+    return this.driverRepository.findOne({  where: { phoneNumber } } );
+
+  }
   
 
   createDriver(createDriverDto : CreateDriverDto) : Promise<Driver> {
@@ -43,9 +48,11 @@ export class DriverService {
     driver.email = createDriverDto.email;
     driver.phoneNumber = createDriverDto.phoneNumber;
     driver.licenseNumber = createDriverDto.licenseNumber;
-    driver.bikeMake = createDriverDto.bikeMake;
-    driver.bikeModel = createDriverDto.bikeModel;
-    driver.bikeRegistrationNumber = createDriverDto.bikeRegistrationNumber;
+    driver.make = createDriverDto.make;
+    driver.model = createDriverDto.model;
+    driver.type = createDriverDto.type;
+    driver.fuelType = createDriverDto.fuelType;
+    driver.registrationNumber = createDriverDto.registrationNumber;
     driver.available = createDriverDto.available;
 
     return this.driverRepository.save(driver)
@@ -67,9 +74,11 @@ export class DriverService {
     driver.email = updateDriverDto.email;
     driver.phoneNumber = updateDriverDto.phoneNumber;
     driver.licenseNumber = updateDriverDto.licenseNumber;
-    driver.bikeMake = updateDriverDto.bikeMake;
-    driver.bikeModel = updateDriverDto.bikeModel;
-    driver.bikeRegistrationNumber = updateDriverDto.bikeRegistrationNumber;
+    driver.make = updateDriverDto.make;
+    driver.model = updateDriverDto.model;
+    driver.type = updateDriverDto.type;
+    driver.fuelType = updateDriverDto.fuelType;
+    driver.registrationNumber = updateDriverDto.registrationNumber;
     driver.available = updateDriverDto.available;
     driver.id = id;
 
@@ -85,13 +94,17 @@ async softDeleteDriver(id: number , isDeleted : boolean) : Promise<boolean> {
         return false;
     }
 
-    driver.isDeleted = isDeleted;
+    if (isDeleted) {
+      driver.isDeleted = true;
+      driver.deletedAt = new Date();
+      
+    } else {
+      driver.isDeleted = false;
+      driver.deletedAt =  null;
+    }
 
     await this.driverRepository.save(driver);
     return true;
 }
-
-
-
 
 }

@@ -7,6 +7,9 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 
+import * as bcrypt from 'bcrypt';
+
+
 @Entity()
 export class User {
   /**
@@ -59,4 +62,7 @@ export class User {
  
   @Column({ type: 'boolean', default: false })
   isDeleted: boolean;
+
+  
+
 }

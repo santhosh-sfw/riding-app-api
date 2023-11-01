@@ -6,12 +6,12 @@ import { DriverService } from './driver.service';
 
 
 
-
-
 @Module({
   imports: [TypeOrmModule.forFeature([Driver])],
   controllers: [DriverController],
   providers: [DriverService],
+  exports:[DriverService],
   
 })
 export class DriverModule {}
+

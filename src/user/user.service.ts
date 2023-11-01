@@ -4,6 +4,10 @@ import { Not, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { RegisterUserDto } from './dto/user-register.dto';
+import * as bcrypt from 'bcrypt';
+import { ResponseDto } from './dto/user-response.dto';
+import { LoginDto } from './dto/user-login.dto';
 
 @Injectable()
 export class UserService {
@@ -32,6 +36,12 @@ export class UserService {
     const driver = await this.userRepository.findOne({ where: { phoneNumber, id: Not(userId) } });
     return !!driver; // Returns true if another user with the same phone number exists, false otherwise
   }
+
+  async findByPhoneNumber(phoneNumber: string): Promise<User | undefined> {
+    return this.userRepository.findOne({  where: { phoneNumber } } );
+  }
+
+  
 
   
   createUser(createUserDto: CreateUserDto): Promise<User> {
@@ -80,20 +90,29 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  
-  
 
   async softDeleteUser(id: number, isDeleted: boolean): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { id } });
-
+  
     if (!user) {
       return false;
     }
-
-    user.isDeleted = isDeleted;
-
+    if (isDeleted) {
+      // Set the isDeleted flag to true
+      user.isDeleted = true;
+      // Set the deletedAt timestamp to the current time
+      user.deletedAt = new Date();
+    } else {
+      user.isDeleted = false;
+      user.deletedAt = null;
+    }
     await this.userRepository.save(user);
     return true;
   }
+  
+
+  
+
+  
   
 }

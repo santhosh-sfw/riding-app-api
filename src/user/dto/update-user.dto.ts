@@ -105,6 +105,4 @@ import {
     @IsString()
     addressLine2:string;
 
-    
-
   }

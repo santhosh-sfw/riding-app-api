@@ -1,5 +1,6 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { IsPhoneNumberFormat, IsPhoneNumberLength } from "../../validation/phone.number.validator";
+import { VehicleType, FuelType } from "../entities/driver.entity";
 
 export class UpdateDriverDto{
     
@@ -31,20 +32,24 @@ export class UpdateDriverDto{
 
     @IsString()
     @IsNotEmpty()
-    bikeMake:string;
+    make:string;
 
     @IsString()
     @IsNotEmpty()
-    bikeModel:string;
+    model:string;
+
+    @IsEnum(VehicleType)
+    type: VehicleType;
+ 
+    @IsEnum(FuelType)
+    fuelType: FuelType;
+
 
     @IsString()
     @IsNotEmpty()
-    bikeRegistrationNumber:string;
+    registrationNumber:string;
 
     @IsBoolean()
     available:boolean;
-
-
-
 
 }

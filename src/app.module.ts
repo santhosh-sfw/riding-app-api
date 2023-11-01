@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { Driver } from './driver/entities/driver.entity';
 import { DriverModule } from './driver/driver.module';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -25,6 +26,7 @@ import { DriverModule } from './driver/driver.module';
     }),
     UserModule,
     DriverModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
