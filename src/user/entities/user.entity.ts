@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
 
-import * as bcrypt from 'bcrypt';
-
+// import * as bcrypt from 'bcrypt';
+import { UserLocation } from 'src/user-location/entities/user-location.entity';
+import { Contact } from 'src/contact/entities/contact.entity';
 
 @Entity()
 export class User {
@@ -38,11 +40,11 @@ export class User {
 
   @Column({ type: 'varchar' })
   city: string;
-  
+
   @Column({ type: 'varchar' })
   state: string;
 
-  @Column({ type: 'varchar'})
+  @Column({ type: 'varchar' })
   pinCode: string;
 
   @Column({ type: 'varchar' })
@@ -59,10 +61,13 @@ export class User {
 
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
- 
+
   @Column({ type: 'boolean', default: false })
   isDeleted: boolean;
 
-  
+  @OneToMany(() => UserLocation, (location) => location.user)
+  locations: Location[];
 
+  @OneToMany(() => Contact, (contact) => contact.user)
+  contacts: Location[];
 }

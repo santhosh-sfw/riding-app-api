@@ -4,14 +4,10 @@ import { Driver } from './entities/driver.entity';
 import { DriverController } from './driver.controller';
 import { DriverService } from './driver.service';
 
-
-
 @Module({
   imports: [TypeOrmModule.forFeature([Driver])],
   controllers: [DriverController],
   providers: [DriverService],
-  exports:[DriverService],
-  
+  exports: [DriverService],
 })
 export class DriverModule {}
-

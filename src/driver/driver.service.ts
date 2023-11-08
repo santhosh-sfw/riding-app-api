@@ -7,12 +7,10 @@ import { UpdateDriverDto } from './dto/update-driver.dto';
 
 @Injectable()
 export class DriverService {
-  
   constructor(
-    @InjectRepository(Driver) private  driverRepository: Repository<Driver>,
+    @InjectRepository(Driver)
+    private readonly driverRepository: Repository<Driver>,
   ) {}
-
-
 
   async EmailExist(email: string): Promise<boolean> {
     const driver = await this.driverRepository.findOne({ where: { email } });
@@ -20,29 +18,35 @@ export class DriverService {
   }
 
   async PhoneNumberExist(phoneNumber: string): Promise<boolean> {
-    const driver = await this.driverRepository.findOne({ where: { phoneNumber } });
+    const driver = await this.driverRepository.findOne({
+      where: { phoneNumber },
+    });
     return !!driver; // Returns true if user exists, false otherwise
   }
 
   async doesEmailExist(email: string, driverId: number): Promise<boolean> {
-    const driver = await this.driverRepository.findOne({ where: { email, id: Not(driverId) } });
+    const driver = await this.driverRepository.findOne({
+      where: { email, id: Not(driverId) },
+    });
     return !!driver; // Returns true if another user with the same email exists, false otherwise
   }
-  
-  async doesPhoneNumberExist(phoneNumber: string, driverId: number): Promise<boolean> {
-    const driver = await this.driverRepository.findOne({ where: { phoneNumber, id: Not(driverId) } });
+
+  async doesPhoneNumberExist(
+    phoneNumber: string,
+    driverId: number,
+  ): Promise<boolean> {
+    const driver = await this.driverRepository.findOne({
+      where: { phoneNumber, id: Not(driverId) },
+    });
     return !!driver; // Returns true if another user with the same phone number exists, false otherwise
   }
 
   async findByPhoneNumber(phoneNumber: string): Promise<Driver | undefined> {
-    return this.driverRepository.findOne({  where: { phoneNumber } } );
-
+    return this.driverRepository.findOne({ where: { phoneNumber } });
   }
-  
 
-  createDriver(createDriverDto : CreateDriverDto) : Promise<Driver> {
-
-    const driver: Driver = new Driver ();
+  createDriver(createDriverDto: CreateDriverDto): Promise<Driver> {
+    const driver: Driver = new Driver();
     driver.firstName = createDriverDto.firstName;
     driver.lastName = createDriverDto.lastName;
     driver.email = createDriverDto.email;
@@ -55,7 +59,7 @@ export class DriverService {
     driver.registrationNumber = createDriverDto.registrationNumber;
     driver.available = createDriverDto.available;
 
-    return this.driverRepository.save(driver)
+    return this.driverRepository.save(driver);
   }
 
   findAllDriver(): Promise<Driver[]> {
@@ -66,9 +70,8 @@ export class DriverService {
     return this.driverRepository.findOneBy({ id });
   }
 
-  updateDriver(id: number,updateDriverDto : UpdateDriverDto): Promise<Driver> {
-
-    const driver:Driver = new Driver();
+  updateDriver(id: number, updateDriverDto: UpdateDriverDto): Promise<Driver> {
+    const driver: Driver = new Driver();
     driver.firstName = updateDriverDto.firstName;
     driver.lastName = updateDriverDto.lastName;
     driver.email = updateDriverDto.email;
@@ -83,28 +86,17 @@ export class DriverService {
     driver.id = id;
 
     return this.driverRepository.save(driver);
+  }
 
-}
-
-async softDeleteDriver(id: number , isDeleted : boolean) : Promise<boolean> {
-
-    const driver = await this.driverRepository.findOne({ where : {id} })
+  async softDeleteDriver(id: number): Promise<boolean> {
+    const driver = await this.driverRepository.findOne({ where: { id } });
 
     if (!driver) {
-        return false;
+      return false;
     }
 
-    if (isDeleted) {
-      driver.isDeleted = true;
-      driver.deletedAt = new Date();
-      
-    } else {
-      driver.isDeleted = false;
-      driver.deletedAt =  null;
-    }
-
+    driver.deletedAt = new Date();
     await this.driverRepository.save(driver);
     return true;
-}
-
+  }
 }

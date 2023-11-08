@@ -4,36 +4,31 @@ import { ResponseDto } from 'src/user/dto/user-response.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-   async signIn(@Body('phoneNumber') phoneNumber: string)  {
-    
+  async signIn(@Body('phoneNumber') phoneNumber: string) {
     const phoneRegex = /^[0-9]*$/; // This regex allows only numbers
 
     if (!phoneRegex.test(phoneNumber)) {
       return {
         success: false,
-        message: "Invalid phone number format",
+        message: 'Invalid phone number format',
       };
     }
-    
+
     const token = await this.authService.signInWithPhoneNumber(phoneNumber);
     if (!token) {
-       return {
-            success: false,
-            message:"Invalid phone number"
-
-        };
-      }
-      return { 
-        success: true,
-        message: "Login Sucessfull",
-        token: token ,
-        };
+      return {
+        success: false,
+        message: 'Invalid phone number',
+      };
     }
-
- 
-  
+    return {
+      success: true,
+      message: 'Login Sucessfull',
+      token: token,
+    };
+  }
 }

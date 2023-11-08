@@ -112,7 +112,7 @@ export class DriverController {
   }
 
   @UseGuards(AuthGuard)
-  @Post(':id')
+  @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateDriverDto: UpdateDriverDto,
@@ -169,14 +169,8 @@ export class DriverController {
   @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string, @Body() driver: Driver) {
-    const { isDeleted } = driver;
-
-    if (isDeleted !== true) {
-      throw new BadRequestException('Invalid soft delete request.');
-    }
-
     // Perform the soft delete operation
-    const result = await this.driverService.softDeleteDriver(+id, isDeleted);
+    const result = await this.driverService.softDeleteDriver(+id);
 
     if (!result) {
       throw new NotFoundException('User not found');

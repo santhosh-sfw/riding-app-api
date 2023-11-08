@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 
 export enum VehicleType {
   CAR = 'car',
@@ -39,15 +46,15 @@ export class Driver {
 
   @Column({
     type: 'enum',
-    enum:VehicleType,
- })
+    enum: VehicleType,
+  })
   type: VehicleType;
 
-  @Column({ 
+  @Column({
     type: 'enum',
-    enum:FuelType,  
+    enum: FuelType,
   })
-  fuelType:FuelType;
+  fuelType: FuelType;
 
   @Column({ type: 'varchar' })
   registrationNumber: string;
@@ -66,6 +73,4 @@ export class Driver {
 
   @Column({ type: 'boolean', default: false })
   isDeleted: boolean;
-
-  
 }
