@@ -1,4 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
+
+export enum VehicleType {
+  CAR = 'car',
+  BIKE = 'bike',
+}
+
+export enum FuelType {
+  EV = 'ev',
+  PETROL = 'petrol',
+  DIESEL = 'diesel',
+}
 
 @Entity()
 export class Driver {
@@ -21,19 +39,28 @@ export class Driver {
   licenseNumber: string;
 
   @Column({ type: 'varchar' })
-  bikeMake: string;
+  make: string;
 
   @Column({ type: 'varchar' })
-  bikeModel: string;
+  model: string;
+
+  @Column({
+    type: 'enum',
+    enum: VehicleType,
+  })
+  type: VehicleType;
+
+  @Column({
+    type: 'enum',
+    enum: FuelType,
+  })
+  fuelType: FuelType;
 
   @Column({ type: 'varchar' })
-  bikeRegistrationNumber: string;
+  registrationNumber: string;
 
   @Column()
   available: boolean; // Indicates if the driver is available for rides
-
-  @Column({ type: 'boolean', default: false })
-  isDeleted: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -43,5 +70,7 @@ export class Driver {
 
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
-  
+
+  @Column({ type: 'boolean', default: false })
+  isDeleted: boolean;
 }
