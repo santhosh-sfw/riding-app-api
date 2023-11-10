@@ -25,7 +25,9 @@ import { AuthGuard } from 'src/auth/auth.guard';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService
+    ) {}
+    
 
   @UseGuards(AuthGuard)
   @Post()
@@ -98,32 +100,33 @@ export class UserController {
       };
     }
   }
-  //   @Get(':id')
-  //   async findOne(@Param('id') id: string) : Promise<ResponseDto> {
-  // try {
-  //   const data = await this.userService.viewUser(+id);
-  //   if (data) {
-  //     return {
-  //       success: true,
-  //       message: 'User retrieved successfully',
-  //       data: data,
-  //     };
-  //   } else {
-  //     return {
-  //       success: false,
-  //       message: 'User not found',
-  //       data: null,
-  //     };
-  //   }
-  // } catch (error) {
-  //   return {
-  //     success: false,
-  //     message: 'An error occurred while fetching data',
-  //     data: null,
-  //   };
-  // }
+  @UseGuards(AuthGuard)
+  @Get('contacts/:id')
+  async findContactByUserId(@Param('id') id: string): Promise<ResponseDto> {
+    try {
+      const data = await this.userService.findByUserId(+id);
 
-  //   }
+      if (data) {
+        return {
+          success: true,
+          message: 'contacts retrieved successfully',
+          data: data,
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Contact not found',
+          data: null,
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: 'An error occurred while fetching data',
+        data: null,
+      };
+    }
+  }
 
   @UseGuards(AuthGuard)
   @Patch(':id')

@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UserLocation } from 'src/user-location/entities/user-location.entity';
+import { ResponseDto } from 'src/dto/response.dto';
 
 @Injectable()
 export class UserService {
@@ -147,6 +148,7 @@ export class UserService {
     return updatedUser;
   }
 
+
   async softDeleteUser(id: number): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { id } });
 
@@ -157,4 +159,17 @@ export class UserService {
     await this.userRepository.save(user);
     return true;
   }
+
+
+  async findByUserId(userId: number): Promise<User | undefined> {
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['contacts'],
+    });
+    
+  }
+
+
+  
+  
 }
