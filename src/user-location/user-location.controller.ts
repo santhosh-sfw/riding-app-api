@@ -121,6 +121,7 @@ export class UserLocationController {
     }
   }
 
+  
   //   @Delete(':id')
   //  async remove(@Param('id') id: string, Body() location: UserLocation) {
   //  }
