@@ -69,5 +69,5 @@ export class User {
   locations: Location[];
 
   @OneToMany(() => Contact, (contact) => contact.user)
-  contacts: Location[];
+  contacts: Contact[];
 }
