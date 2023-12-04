@@ -129,6 +129,34 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('locations/:id')
+  async findLocationByUserId(@Param('id') id: string): Promise<ResponseDto> {
+    try {
+      const data = await this.userService.findLocationsByUserId(+id);
+
+      if (data) {
+        return {
+          success: true,
+          message: 'Location retrieved successfully',
+          data: data,
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Location not found',
+          data: null,
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: 'An error occurred while fetching data',
+        data: null,
+      };
+    }
+  }
+
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,

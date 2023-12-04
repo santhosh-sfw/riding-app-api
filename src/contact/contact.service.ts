@@ -4,12 +4,14 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contact } from './entities/contact.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ContactService {
   constructor(
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
+
   ) {}
   create(createContactDto: CreateContactDto): Promise<Contact> {
     const { userId, firstName, lastName, phoneNumber } = createContactDto;
@@ -54,4 +56,5 @@ export class ContactService {
     await this.contactRepository.save(location);
     return true;
   }
+  
 }

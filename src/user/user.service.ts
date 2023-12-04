@@ -169,6 +169,14 @@ export class UserService {
     
   }
 
+  async findLocationsByUserId(userId: number): Promise<User | undefined> {
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['locations'],
+    });
+    
+  }
+
 
   
   
